@@ -57,8 +57,8 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_DB', 'egov'),
         'USER': os.environ.get('POSTGRES_USER', 'egov_user'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'egov_pass'),
-        'HOST': 'db',
-        'PORT': 5432,
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': int(os.environ.get('POSTGRES_PORT', 5432)),
     }
 }
 DATABASE_ROUTERS = ('django_tenants.routers.TenantSyncRouter',)
@@ -109,6 +109,24 @@ CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL', 'redis://redis:6379/0')
 # Ollama
 OLLAMA_HOST = os.environ.get('OLLAMA_HOST', 'http://ollama:11434')
 OLLAMA_MODEL = os.environ.get('OLLAMA_MODEL', 'llama3')
+
+ROOT_URLCONF = 'config.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Addis_Ababa'
