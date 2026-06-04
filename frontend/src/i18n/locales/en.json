@@ -1,0 +1,12 @@
+{
+  "login": "Login",
+  "logout": "Logout",
+  "username": "Username",
+  "password": "Password",
+  "forgot_password": "Forgot password?",
+  "login_failed": "Invalid credentials",
+  "dashboard": "Dashboard",
+  "services": "Services",
+  "applications": "Applications",
+  "profile": "Profile"
+}
