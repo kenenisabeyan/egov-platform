@@ -59,6 +59,9 @@ DATABASES = {
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'egov_pass'),
         'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
         'PORT': int(os.environ.get('POSTGRES_PORT', 5432)),
+        'OPTIONS': {
+            'sslmode': os.environ.get('POSTGRES_SSLMODE', 'prefer'),
+        }
     }
 }
 DATABASE_ROUTERS = ('django_tenants.routers.TenantSyncRouter',)
