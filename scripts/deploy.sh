@@ -9,9 +9,19 @@ if ! command -v docker &> /dev/null; then
     echo "Reboot or re-login to apply Docker group"
 fi
 
-if ! command -v docker-compose &> /dev/null; then
-    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
+if ! command -v docker-compose &> /dev/null && ! command -v "docker" &> /dev/null; then
+    echo "Docker is required but not installed. Please install Docker Desktop or Docker Engine first."
+    exit 1
+fi
+
+COMPOSE_CMD=""
+if command -v docker-compose &> /dev/null; then
+    COMPOSE_CMD="docker-compose"
+elif command -v docker &> /dev/null; then
+    COMPOSE_CMD="docker compose"
+else
+    echo "No Docker Compose CLI available."
+    exit 1
 fi
 
 if [ ! -f .env ]; then
@@ -20,14 +30,14 @@ if [ ! -f .env ]; then
     exit 1
 fi
 
-docker-compose pull
-docker-compose up -d --build
+$COMPOSE_CMD pull
+$COMPOSE_CMD up -d --build
 
 echo "⏳ Waiting for Ollama to pull model (first time may take minutes)..."
-docker-compose exec -T ollama ollama pull llama3
+$COMPOSE_CMD exec -T ollama ollama pull llama3
 
-docker-compose exec -T backend python manage.py migrate_schemas --shared
-docker-compose exec -T backend python manage.py create_tenant_schemas
-docker-compose exec -T backend python manage.py collectstatic --noinput
+$COMPOSE_CMD exec -T backend python manage.py migrate_schemas --shared
+$COMPOSE_CMD exec -T backend python manage.py create_tenant_schemas
+$COMPOSE_CMD exec -T backend python manage.py collectstatic --noinput
 
 echo "✅ Platform running at https://$(grep ALLOWED_HOSTS .env | cut -d '=' -f2 | head -1)"

@@ -17,5 +17,7 @@ urlpatterns = [
     path('api/services/', include('apps.services.urls')),
     path('api/applications/', include('apps.applications.urls')),
     path('api/documents/', include('apps.documents.urls')),
+    path('api/notifications/', include('apps.notifications.urls')),
     path('api/ai/', include('apps.ai_assistant.urls')),
+    path('health/', include('health.urls')),
 ]
