@@ -1,16 +1,27 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useRegisterMutation } from '../services/authApi';
+import { setCredentials } from '../store/authSlice';
 
 export default function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [register, { isLoading }] = useRegisterMutation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Mock Registration Successful!');
-    navigate('/login');
+    try {
+      const res = await register({ username, email, phone, password }).unwrap();
+      dispatch(setCredentials(res));
+      navigate('/');
+    } catch (err) {
+      alert('Registration failed. Please check your details and try again.');
+    }
   };
 
   return (
@@ -37,6 +48,14 @@ export default function Register() {
             required
           />
           <input
+            type="tel"
+            placeholder="0962343967 or +251962343967"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-white"
+            required
+          />
+          <input
             type="password"
             placeholder="Password"
             value={password}
@@ -44,8 +63,12 @@ export default function Register() {
             className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-white"
             required
           />
-          <button type="submit" className="w-full btn btn-primary py-3">
-            Register
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full btn btn-primary py-3"
+          >
+            {isLoading ? 'Registering...' : 'Register'}
           </button>
         </form>
         <p className="text-center text-sm mt-4 text-gray-600 dark:text-gray-400">

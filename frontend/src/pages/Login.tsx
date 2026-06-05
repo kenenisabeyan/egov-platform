@@ -68,7 +68,7 @@ export default function Login() {
           {/* Username/Email Input */}
           <div className="space-y-1">
             <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 block px-1">
-              {t('username')}
+              Email or Username
             </label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
@@ -78,7 +78,7 @@ export default function Login() {
               </span>
               <input
                 type="text"
-                placeholder="e.g. admin@civicflow.et"
+                placeholder="Email or username"
                 value={username}
                 onChange={e => setUsername(e.target.value)}
                 className="w-full pl-11 pr-4 py-3.5 bg-slate-100/50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/10 dark:focus:ring-blue-400/10 rounded-2xl outline-none text-slate-800 dark:text-white transition duration-200 font-medium placeholder-slate-400 dark:placeholder-slate-600"
